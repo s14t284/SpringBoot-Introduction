@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- <mapper> はnamespace 属性に対応するインタフェースの名前空間を記述する場所 -->
+<mapper namespace="com.example.search.mappers.MemberMapper">
+  <!-- 結果と結果を受け取るクラスの紐付け -->
+  <!-- <resultMap> は 「クエリ結果のどのカラム(tableのカラム)とクラスのどのプロパティ(クラス中の変数名)が紐づくかを定義する場所」-->
+  <resultMap id="memberResultMap" type="com.example.search.domains.Member">
+    <result property="id" column="id" />
+    <result property="name" column="name"/>
+  </resultMap>
+  <!-- SQL -->
+  <!-- idはdomainの関数名．今回はall()の設定をするので"all" resultMapは上で定義したresultMapの名前 -->
+  <select id="all" resultMap="memberResultMap">
+        SELECT * FROM members
+  </select>
+  <select id="findByNameLike" resultMap="memberResultMap" parameterType="String">
+        SELECT * FROM members WHERE name LIKE CONCAT('%', #{words}, '%')
+  </select>
+  <insert id="add" parameterType="com.example.search.domains.Member">
+        INSERT INTO members(name) VALUES (#{name});
+  </insert>
+</mapper>
